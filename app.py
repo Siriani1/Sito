@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, session, url_for, redirect
 import pyodbc,pandas,geopandas,contextily
 import re
+import numpy as np
 
 app = Flask(__name__)
 
@@ -28,7 +29,8 @@ def login():
             session['id'] = account[0]
             session['username'] = account[1]
             msg = 'Logged in successfully !'
-            return render_template('Index.html', msg = msg)
+            #return render_template('Index.html', msg = msg)
+            return redirect(url_for('index'))
         else:
             msg = 'Incorrect username / password !'
     return render_template('login.html', msg = msg)
@@ -67,12 +69,14 @@ def logout():
 
 @app.route('/index')
 def index():
-    mcDonald = pandas.read_csv('McDonald.csv')
-    mcDonald = geopandas.GeoDataFrame(mcDonald,geometry=geopandas.points_from_xy(mcDonald["lon"],mcDonald["lat"]))
-    mcDonald.crs = 'epsg:4326'
-    ax = mcDonald.to_crs(epsg=3857).plot(figsize=(30,22),color='red')
-    contextily.add_basemap(ax)
-    return render_template('index.html',a=ax)
+    df = pandas.read_csv('McDonald.csv')
+    df = df[['indirizzo','lat','lon']]
+    mc = np.array(df)
+    result = ''
+    for x in mc:
+        result += '[' + str(x[2]) + ',' + str(x[1]) + ',' + "'" + str(x[0]) + "'" + "],"
+    result = '[' + result[0:len(result) - 1] + ']'
+    return render_template('index.html',df=result)
     
 
 if __name__ == '__main__':
