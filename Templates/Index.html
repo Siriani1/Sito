@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Leaflet mobile example</title>
+  <title>MCDonald</title>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,7 +54,25 @@
 
     <script>
         const url = '../static/mcdonalds.png'
+        const urlMan = '../static/fat.png'
+
         
+        var Mc = new L.icon({
+                iconUrl: url,
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [27, 27   ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34]
+        });
+
+        var man = new L.icon({
+                iconUrl: urlMan,
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [27, 27   ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34]
+        });
+
         if('geolocation' in navigator) {
             console.log('geolocation is available')
             navigator.geolocation.getCurrentPosition(position => {
@@ -65,14 +83,7 @@
             const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             const attribution = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             L.tileLayer(tileUrl, { attribution, maxZoom:18, minZoom:6 }).addTo(mymap);
-            const marker = L.marker([latitude, longitude]).addTo(mymap).bindPopup("You are here");
-            var Mc = new L.icon({
-                iconUrl: url,
-                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                iconSize: [27, 27],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34]
-            });
+            const marker = L.marker([latitude, longitude], {icon: man}).addTo(mymap).bindPopup("You are here");
             var x = {{df | safe}};
             //var x = [[9.17,45.45]]
             for(var i = 0; i < x.length; i++){
