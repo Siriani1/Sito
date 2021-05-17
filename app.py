@@ -2,6 +2,8 @@ from flask import Flask, request, render_template, session, url_for, redirect
 import pyodbc,pandas,geopandas,contextily
 import re
 import numpy as np
+from datetime import date, datetime
+import time
 
 app = Flask(__name__)
 
@@ -29,6 +31,14 @@ def login():
             session['id'] = account[0]
             session['username'] = account[1]
             msg = 'Logged in successfully !'
+
+            global data
+            data = datetime.now().strftime('%d/%m/%Y')
+            data = datetime.strptime(data,'%d/%m/%Y')
+            global tempo_inizio
+            tempo_inizio = datetime.now().strftime('%H:%M:%S')
+            cursor.execute('INSERT INTO log (id_utente,data,ora_inizio) VALUES (?,?,?)',(session['id'],data,tempo_inizio))
+            cursor.commit()
             #return render_template('Index.html', msg = msg)
             return redirect(url_for('index'))
         else:
@@ -61,6 +71,10 @@ def register():
 
 @app.route('/logout')
 def logout():
+    ora_fine = datetime.now().strftime('%H:%M:%S')
+    cursor = connection.cursor()
+    cursor.execute('UPDATE log SET ora_fine = (?) WHERE id_utente = (?) AND data = (?) AND ora_inizio = (?)', (ora_fine,session['id'],data,tempo_inizio) )
+    cursor.commit()
     session.pop('loggedin', None)
     session.pop('id', None)
     session.pop('username', None)

@@ -75,7 +75,7 @@
         var Mc = new L.icon({
                 iconUrl: url,
                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                iconSize: [27, 27   ],
+                iconSize: [27, 27],
                 iconAnchor: [12, 41],
                 popupAnchor: [1, -34]
         });
@@ -116,7 +116,7 @@
                     //console.log('ciao')
                     g = new L.marker([x[i][1], x[i][0]], {icon: Mc}).addTo(mymap).bindPopup(x[i][2]).on('click', Click);
                 }
-                setInterval([latitude,longitude], 1000);
+                setInterval(position, 1000);
 
                 //$('leaflet-routing-container').css('background-color','white');
                 
