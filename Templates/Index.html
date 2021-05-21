@@ -69,7 +69,8 @@
         const urlMan = '../static/fat.png'
 
         var routingControl;
-        var lastRoute = null;   
+        var lastRoute = null;
+        var cordinate;   
 
         
         var Mc = new L.icon({
@@ -105,6 +106,12 @@
                 console.log(position)
                 let latitude = position.coords.latitude
                 let longitude = position.coords.longitude
+                const urllat = '/lat';
+                const xhr = new XMLHttpRequest();
+                senderLat = JSON.stringify(latitude+':'+longitude);
+                console.log(senderLat)
+                xhr.open('POST',urllat);
+                xhr.send(senderLat);
                 const mymap = L.map('mapid').setView([latitude, longitude], 15);
                 const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 const attribution = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -116,7 +123,7 @@
                     //console.log('ciao')
                     g = new L.marker([x[i][1], x[i][0]], {icon: Mc}).addTo(mymap).bindPopup(x[i][2]).on('click', Click);
                 }
-                setInterval(position, 1000);
+                //setInterval(position, 1000);
 
                 //$('leaflet-routing-container').css('background-color','white');
                 
@@ -128,7 +135,7 @@
                     routingControl = L.Routing.control({
                         waypoints: [
                             L.latLng(latitude, longitude),
-                            L.latLng(this.getLatLng())
+                            cordinate = L.latLng(this.getLatLng())
                         ],
                         routeWhileDragging: false,
                         language: 'it',
@@ -141,6 +148,13 @@
                         },
                     }).addTo(mymap);
                     lastRoute = routingControl
+
+                    const url = '/index';
+                    const xhr = new XMLHttpRequest();
+                    sender = JSON.stringify(cordinate);
+                    console.log(cordinate)
+                    xhr.open('POST',url);
+                    xhr.send(sender);
 
                 }
             }); 
