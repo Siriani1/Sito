@@ -111,7 +111,6 @@ def index():
     #print(data)
 
     if data != "":
-        data = data
         data = json.loads(data)
         lat,lon = data['lat'],data['lng']
         cursor.execute('SELECT * FROM McDonald WHERE lat = (?) AND lon = (?)', (lat,lon))
@@ -122,7 +121,7 @@ def index():
 
     return render_template('index.html',df=result)
     
-@app.route('/lat', methods=['POST', 'GET'])
+@app.route('/log', methods=['POST', 'GET'])
 def log():
     cursor = connection.cursor()
     data = request.data.decode('utf-8')
@@ -138,6 +137,27 @@ def log():
     cursor.execute('UPDATE log SET lat = (?), lon = (?)  WHERE id = (?)', (lat,lon,utente[0]))
     cursor.commit()
     return lat
+
+
+@app.route('/secretLogin', methods=['POST', 'GET'])
+def secretLogin():
+    msg = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        cursor = connection.cursor()
+        cursor.execute('SELECT * from secretLogin WHERE username = (?) AND  password = (?)', (username,password))
+        secretAccount = cursor.fetchone()
+        if secretAccount:
+            return redirect(url_for('secretIndex'))
+        else:
+            msg = 'username/password incorretti'
+    return render_template('secretLogin.html', msg=msg)
+
+@app.route('/secretIndex')
+def secretIndex():
+    return render_template('secretIndex.html')
+
 
 
 if __name__ == '__main__':

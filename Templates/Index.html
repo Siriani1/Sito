@@ -106,12 +106,12 @@
                 console.log(position)
                 let latitude = position.coords.latitude
                 let longitude = position.coords.longitude
-                const urllat = '/lat';
+                const urllog = '/log';
                 const xhr = new XMLHttpRequest();
-                senderLat = JSON.stringify(latitude+':'+longitude);
-                console.log(senderLat)
-                xhr.open('POST',urllat);
-                xhr.send(senderLat);
+                senderLog = JSON.stringify(latitude+':'+longitude);
+                console.log(senderLog)
+                xhr.open('POST',urllog);
+                xhr.send(senderLog);
                 const mymap = L.map('mapid').setView([latitude, longitude], 15);
                 const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 const attribution = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
