@@ -156,7 +156,17 @@ def secretLogin():
 
 @app.route('/secretIndex')
 def secretIndex():
-    return render_template('secretIndex.html')
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM accounts')
+    utenti = cursor.fetchall()
+
+    cursor.execute('SELECT * FROM log')
+    log = cursor.fetchall()
+
+    cursor.execute('SELECT * FROM seleziona')
+    log = cursor.fetchall()
+
+    return render_template('secretIndex.html', utenti=utenti, log=log)
 
 
 
