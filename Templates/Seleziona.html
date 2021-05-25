@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/Seleziona">Seleziona<span class="sr-only">(current)</span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/Log">Log</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#">McDonald</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Utenti">Utenti</a>
+        </li>
+      </ul>
+    </div>
+</nav>
+
+    <div class="container">
+      <h1>Utenti</h1>         
+      <table class="table table-bordered table-striped mb-0 table table-bordered">
+        <thead>
+          <tr>
+            <td><h3>ID</h3></td>
+            <td><h3>IdMc</h3></td>
+            <td><h3>IdLog</h3></td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in seleziona %}
+            <tr><td>{{row.id}}</td><td>{{row.idMc}}</td><td>{{row.idLog}}</td></tr>
+          {% endfor %} 
+        </tbody>
+      </table>
+    </div>
+
+   
+</body>
+</html>

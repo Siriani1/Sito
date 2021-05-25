@@ -149,24 +149,38 @@ def secretLogin():
         cursor.execute('SELECT * from secretLogin WHERE username = (?) AND  password = (?)', (username,password))
         secretAccount = cursor.fetchone()
         if secretAccount:
-            return redirect(url_for('secretIndex'))
+            return redirect(url_for('Utenti'))
         else:
             msg = 'username/password incorretti'
     return render_template('secretLogin.html', msg=msg)
 
-@app.route('/secretIndex')
-def secretIndex():
+@app.route('/Utenti')
+def Utenti():
     cursor = connection.cursor()
     cursor.execute('SELECT * FROM accounts')
     utenti = cursor.fetchall()
 
+    cursor.execute('SELECT * FROM seleziona')
+    seleziona = cursor.fetchall()
+
+    return render_template('Utenti.html', utenti=utenti, log=log, seleziona=seleziona)
+
+@app.route('/Log')
+def Log():
+    cursor = connection.cursor()
     cursor.execute('SELECT * FROM log')
     log = cursor.fetchall()
 
-    cursor.execute('SELECT * FROM seleziona')
-    log = cursor.fetchall()
+    return render_template('Log.html', log=log)
 
-    return render_template('secretIndex.html', utenti=utenti, log=log)
+@app.route('/Seleziona')
+def Seleziona():
+    cursor = connection.cursor()
+    cursor.execute('SELECT * FROM Seleziona')
+    seleziona = cursor.fetchall()
+
+    return render_template('Seleziona.html', seleziona=seleziona)
+
 
 
 
