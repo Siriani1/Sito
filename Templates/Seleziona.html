@@ -28,22 +28,28 @@
     </div>
 </nav>
 
-    <div class="container">
-      <h1>Utenti</h1>         
-      <table class="table table-bordered table-striped mb-0 table table-bordered">
-        <thead>
-          <tr>
-            <td><h3>ID</h3></td>
-            <td><h3>IdMc</h3></td>
-            <td><h3>IdLog</h3></td>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in seleziona %}
-            <tr><td>{{row.id}}</td><td>{{row.idMc}}</td><td>{{row.idLog}}</td></tr>
-          {% endfor %} 
-        </tbody>
-      </table>
+    <div class="justify-content-center container">
+      <h1>Utenti</h1>  
+      <div class="table table-responsive" style="height: 600px; width: 1250px;">         
+        <table class="table table-bordered table-striped mb-0 table table-bordered">
+          <thead>
+            <tr>
+              <td><h3>Username</h3></td>
+              <td><h3>Data</h3></td>
+              <td><h3>Ora inizio</h3></td>
+              <td><h3>Ora fine</h3></td>
+              <td><h3>lat</h3></td>
+              <td><h3>lon</h3></td>
+              <td><h3>Indirizzo Mc</h3></td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in seleziona %}
+              <tr><td>{{row.username}}</td><td>{{row.data}}</td><td>{{row.ora_inizio}}</td><td>{{row.ora_fine}}</td><td>{{row.lat}}</td><td>{{row.lon}}</td><td>{{row.indirizzo}}</td></tr>
+            {% endfor %} 
+          </tbody>
+        </table>
+      </div>
     </div>
 
    

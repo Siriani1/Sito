@@ -73,53 +73,59 @@ def register():
 
 @app.route('/logout')
 def logout():
-    global ora_fine
-    ora_fine = datetime.now().strftime('%H:%M:%S')
-    cursor = connection.cursor()
-    cursor.execute('UPDATE log SET ora_fine = (?) WHERE id_utente = (?) AND data = (?) AND ora_inizio = (?)', (ora_fine,session['id'],data,tempo_inizio))
-    cursor.commit()
-    session.pop('loggedin', None)
-    session.pop('id', None)
-    session.pop('username', None)
-    return redirect(url_for('login'))
+    try:
+        global ora_fine
+        ora_fine = datetime.now().strftime('%H:%M:%S')
+        cursor = connection.cursor()
+        cursor.execute('UPDATE log SET ora_fine = (?) WHERE id_utente = (?) AND data = (?) AND ora_inizio = (?)', (ora_fine,session['id'],data,tempo_inizio))
+        cursor.commit()
+        session.pop('loggedin', None)
+        session.pop('id', None)
+        session.pop('username', None)
+        return redirect(url_for('login'))
+    except:
+        return redirect(url_for('login'))
 
 
 @app.route('/index', methods=['POST', 'GET'])
 def index():
-    cursor = connection.cursor()
-    #df = pandas.read_csv('McDonald.csv')
-    df = 'SELECT * FROM dbo.McDonald'
-    df = pandas.read_sql_query(df,connection)
-    df = df[['indirizzo','lat','lon']]
-    #print(df)
-    mc = np.array(df)
-    result = ''
-    for x in mc:
-        result += '[' + str(x[2]) + ',' + str(x[1]) + ',' + "'" + str(x[0]) + "'" + "],"
-    result = '[' + result[0:len(result) - 1] + ']'
+    try:
+        cursor = connection.cursor()
+        #df = pandas.read_csv('McDonald.csv')
+        df = 'SELECT * FROM dbo.McDonald'
+        df = pandas.read_sql_query(df,connection)
+        df = df[['indirizzo','lat','lon']]
+        #print(df)
+        mc = np.array(df)
+        result = ''
+        for x in mc:
+            result += '[' + str(x[2]) + ',' + str(x[1]) + ',' + "'" + str(x[0]) + "'" + "],"
+        result = '[' + result[0:len(result) - 1] + ']'
 
 
-    cursor.execute('SELECT TOP 1 * FROM log WHERE id_utente = (?) ORDER BY data DESC,ora_inizio DESC', (session['id']))
-    #cursor.commit()
-    global utente
-    utente = cursor.fetchone()
-    
+        cursor.execute('SELECT TOP 1 * FROM log WHERE id_utente = (?) ORDER BY data DESC,ora_inizio DESC', (session['id']))
+        #cursor.commit()
+        global utente
+        utente = cursor.fetchone()
+        
 
-    #print(utente[0])
-    
-    data = request.data.decode('utf-8')
-    #print(data)
+        #print(utente[0])
+        
+        data = request.data.decode('utf-8')
+        #print(data)
 
-    if data != "":
-        data = json.loads(data)
-        lat,lon = data['lat'],data['lng']
-        cursor.execute('SELECT * FROM McDonald WHERE lat = (?) AND lon = (?)', (lat,lon))
-        Mc = cursor.fetchone()
-        cursor.execute('INSERT INTO seleziona (idMc, idLog) VALUES ( ?, ?)', (Mc[0],utente[0]))
-        cursor.commit()
-    
+        if data != "":
+            data = json.loads(data)
+            lat,lon = data['lat'],data['lng']
+            cursor.execute('SELECT * FROM McDonald WHERE lat = (?) AND lon = (?)', (lat,lon))
+            Mc = cursor.fetchone()
+            cursor.execute('INSERT INTO seleziona (idMc, idLog) VALUES ( ?, ?)', (Mc[0],utente[0]))
+            cursor.commit()
+        
 
-    return render_template('index.html',df=result)
+        return render_template('index.html',df=result)
+    except:
+        return redirect(url_for('login'))
     
 @app.route('/log', methods=['POST', 'GET'])
 def log():
@@ -176,7 +182,10 @@ def Log():
 @app.route('/Seleziona')
 def Seleziona():
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM Seleziona')
+    cursor.execute('''select accounts.username, log.data, log.ora_inizio, log.ora_fine, log.lat, log.lon, McDonald.indirizzo
+    from log  INNER JOIN Seleziona ON log.id = Seleziona.idLog
+    INNER JOIN McDonald ON Seleziona.idMc = McDonald.id
+    INNER JOIN accounts ON accounts.id = log.id_utente''')
     seleziona = cursor.fetchall()
 
     return render_template('Seleziona.html', seleziona=seleziona)
