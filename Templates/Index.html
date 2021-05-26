@@ -4,6 +4,7 @@
   <title>McDonald</title>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link 
    rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -30,37 +31,30 @@
   <style>
     
     #mapid { 
-        height: 600px; 
+        height: 645px; 
         width: 100%;
     
-    }
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;   
-        background-color: #333;
-    }
-    
-    li {
-        float: left;
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 10px 12px;
-        text-decoration: none;
     }
     
     
     </style>
 </head>
 <body>
-    <div class="container">
-        <ul>
-            <li><h1>Hi {{session.username}}</h1></li>
-            <li><h1><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></h1></li>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="height: 75px;">
+        <a class="navbar-brand" href="/index">Hi {{session.username}}<span class="sr-only">(current)</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </li>
         </ul>
-    </div>
+        </div>
+    </nav>
+
     <div id="mapid"></div>
     
     <script>
