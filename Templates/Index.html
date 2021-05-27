@@ -96,31 +96,33 @@
 
         if('geolocation' in navigator) {
             console.log('geolocation is available')
+            // prendo la posizione dell'utente
             navigator.geolocation.getCurrentPosition(position => {
                 console.log(position)
                 let latitude = position.coords.latitude
                 let longitude = position.coords.longitude
+                // passo lat e lon dell'utente a python 
                 const urllog = '/log';
                 const xhr = new XMLHttpRequest();
                 senderLog = JSON.stringify(latitude+':'+longitude);
                 console.log(senderLog)
                 xhr.open('POST',urllog);
                 xhr.send(senderLog);
+                // creo la mappa e con punto di riferimento le coordinate dell'utente e li creo il marker
                 const mymap = L.map('mapid').setView([latitude, longitude], 15);
                 const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 const attribution = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 L.tileLayer(tileUrl, { attribution, maxZoom:18, minZoom:6 }).addTo(mymap);
                 const marker = L.marker([latitude, longitude], {icon: man}).addTo(mymap).bindPopup("You are here");
                 var x = {{df | safe}};
-                //var x = [[9.17,45.45]]
+                //creo i marchi per tutti i McDonald che ci sono nel database
                 for(var i = 0; i < x.length; i++){
                     //console.log('ciao')
                     g = new L.marker([x[i][1], x[i][0]], {icon: Mc}).addTo(mymap).bindPopup(x[i][2]).on('click', Click);
                 }
                 //setInterval(position, 1000);
 
-                //$('leaflet-routing-container').css('background-color','white');
-                
+                //serve per creare la strada tra il marker dell'utente e il marker selezionato
                 function Click(e){
                     if (lastRoute != null) {
                         mymap.removeControl(lastRoute);
@@ -142,7 +144,8 @@
                         },
                     }).addTo(mymap);
                     lastRoute = routingControl
-
+                    
+                    // passo le coordinate del marker selezionato dall'utente a python
                     const url = '/index';
                     const xhr = new XMLHttpRequest();
                     sender = JSON.stringify(cordinate);
