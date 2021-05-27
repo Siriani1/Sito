@@ -81,7 +81,6 @@ PySocks @ file:///D:/bld/pysocks_1610291737679/work
 python-dateutil==2.8.1
 pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1612179539967/work
 pywin32==300
-pywinpty @ file:///D:/bld/pywinpty_1621378659215/work/target/wheels/pywinpty-1.1.1-cp39-none-win_amd64.whl
 pyzmq @ file:///D:/bld/pyzmq_1614611981521/work
 qtconsole @ file:///home/conda/feedstock_root/build_artifacts/qtconsole_1615946127199/work
 QtPy==1.9.0
