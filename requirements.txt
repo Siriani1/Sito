@@ -1,9 +1,7 @@
-Click==7.0
-Flask==1.1.1
-gunicorn==20.0.4
-itsdangerous==1.1.0
-Jinja2==2.10.3
-MarkupSafe==1.1.1
-Werkzeug==0.16.0
-pyodbc @ file:///D:/bld/pyodbc_1610633553588/work
-pypyodbc @ file:///D:/bld/pypyodbc_1602559220124/work
+flask
+pyodbc
+pandas
+re
+numpy
+datetime
+json
