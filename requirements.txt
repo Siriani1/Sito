@@ -1,6 +1,4 @@
-flask
+Flask
 pyodbc
 pandas
 numpy
-datetime
-json
