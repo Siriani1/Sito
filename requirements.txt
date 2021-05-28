@@ -1,7 +1,6 @@
 flask
 pyodbc
 pandas
-re
 numpy
 datetime
 json
