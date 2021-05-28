@@ -1,7 +1,6 @@
 #importo tutte le librerie necessarie 
 from flask import Flask, request, render_template, session, url_for, redirect
 import pyodbc,pandas
-import pandas
 import re
 import numpy as np
 from datetime import datetime
@@ -146,21 +145,26 @@ def index():
     
 @app.route('/log', methods=['POST', 'GET'])
 def log():
-    cursor = connection.cursor()
-    data = request.data.decode('utf-8')
-    #print(data)
-    #divido data in due parti divisi dai : e prendo la prima parte
-    lat = data.split(":")[0]
-    #prendo la seconda parte
-    lon = data.split(":")[1]
-    #tolgo da lat gli apici iniziali
-    lat = lat[1:]
-    #tolgo da lon gli apici finali
-    lon = lon[:-1]
-    #inserisco lat e lon dell'utente nel database
-    cursor.execute('UPDATE log SET lat = (?), lon = (?)  WHERE id = (?)', (lat,lon,utente[0]))
-    cursor.commit()
-    return lat
+    try:
+
+        cursor = connection.cursor()
+        data = request.data.decode('utf-8')
+        #print(data)
+        #divido data in due parti divisi dai : e prendo la prima parte
+        lat = data.split(":")[0]
+        #prendo la seconda parte
+        lon = data.split(":")[1]
+        #tolgo da lat gli apici iniziali
+        lat = lat[1:]
+        #tolgo da lon gli apici finali
+        lon = lon[:-1]
+        #inserisco lat e lon dell'utente nel database
+        cursor.execute('UPDATE log SET lat = (?), lon = (?)  WHERE id = (?)', (lat,lon,utente[0]))
+        cursor.commit()
+        return lat
+    
+    except:
+        return redirect(url_for('login'))
 
 
 @app.route('/secretLogin', methods=['POST', 'GET'])
@@ -198,15 +202,18 @@ def Log():
 
 @app.route('/Seleziona')
 def Seleziona():
-    #faccio una select con inner join e poi passo le informazioni al file html
-    cursor = connection.cursor()
-    cursor.execute('''select accounts.username, log.data, log.ora_inizio, log.ora_fine, log.lat, log.lon, McDonald.indirizzo
-    from log  INNER JOIN Seleziona ON log.id = Seleziona.idLog
-    INNER JOIN McDonald ON Seleziona.idMc = McDonald.id
-    INNER JOIN accounts ON accounts.id = log.id_utente''')
-    seleziona = cursor.fetchall()
+    try: 
+        #faccio una select con inner join e poi passo le informazioni al file html
+        cursor = connection.cursor()
+        cursor.execute('''select accounts.username, log.data, log.ora_inizio, log.ora_fine, log.lat, log.lon, McDonald.indirizzo
+        from log  INNER JOIN Seleziona ON log.id = Seleziona.idLog
+        INNER JOIN McDonald ON Seleziona.idMc = McDonald.id
+        INNER JOIN accounts ON accounts.id = log.id_utente''')
+        seleziona = cursor.fetchall()
 
-    return render_template('Seleziona.html', seleziona=seleziona)
+        return render_template('Seleziona.html', seleziona=seleziona)
+    except:
+        return redirect(url_for('login'))
 
 
 
